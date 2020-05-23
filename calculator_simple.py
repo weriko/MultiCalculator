@@ -1,19 +1,14 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 19 11:57:09 2020
-
-@author: andres
-"""
 import numpy as np
+from numpy import sin, arcsin, arctan, cos, arccos , tan
 from matplotlib import pyplot as plt
 from tkinter import *
 import pandas as pd
 from tkinter import filedialog
-
+from sklearn.linear_model import LogisticRegression, LinearRegression
 π = np.pi
 e = np.e
 E = 10
+
 
 class Calculator():
     def __init__(self):
@@ -75,11 +70,13 @@ class Calculator():
         self.screen_text.set(self.expression)
         
     def click(self,button_press):
+        self.expression = self.screen1.get()
 
         self.expression += str(button_press)
         self.screen_text.set(self.expression)
         
     def term(self):
+        self.expression = self.screen1.get()
         try:
             Term = str(eval(self.expression))
             self.expression = Term
@@ -89,20 +86,73 @@ class Calculator():
             Term = "syntax ERROR"
         self.screen_text.set(Term) 
         
+        
+        
+    def to_classes(self,df):
+        dic ={}
+        y= []
+        for i,x in enumerate(set(df.iloc[:,-1])):
+            dic[x] = i
+        for x in df.iloc[:,-1]:
+            y.append(dic[x])
+        return np.array(y)
+            
+            
+        
+    def fill(self, df):
+        X,y = [],[]
+        for i in range(len(df.values)):
+            a = df.loc[i].values.flatten().tolist()
+            X.append(a[:len(a)-2])
+            y.append(a[-1])
+        return np.array(X), y
+        
     def log_reg(self):
         file_path = filedialog.askopenfilename()
-        h ="building this..."
-    
+        df = pd.read_csv(file_path)
+               
+        X, y = self.fill(df)
+        y = self.to_classes(df)
+  
+       
+        clf = LogisticRegression(random_state=0).fit(X, y)
+        p = ",".join(input().split())
+        a = f"np.array([[{p}]])"
+        pred = eval((a))
+        print(clf.predict(pred))
+        
+        
+        #print("Predicted --", clf.predict(input()))
     def lin_reg(self):
         file_path = filedialog.askopenfilename()
-        h ="building this..."
+        df = pd.read_csv(file_path)
+               
+        X, y = self.fill(df)
+        y = self.to_classes(df)
+  
+       
+        clf = LinearRegression().fit(X, y)
+        p = ",".join(input().split())
+        a = f"np.array([[{p}]])"
+        pred = eval((a))
+        print(clf.predict(pred))
         
     def graph(self):
-        h ="building this..."
+        x = np.linspace(-np.pi, np.pi, 201)
+        
+        plt.plot(x, np.sin(x))
+        
+        plt.xlabel('Angle [rad]')
+        
+        plt.ylabel('sin(x)')
+        
+        plt.axis('tight')
+        
+        plt.show()
+                
     
     def stat(self):
-        n ="building this..."
-    
+        pass
     def circuits(self):
         #hago OHM, Divisores y equivalentes
         f="building this..."
@@ -110,12 +160,13 @@ class Calculator():
     def physics(self):
         #movimientos
         p="building this..."
+        
     
     def scientific(self):
         self.clear(self.window)
         self.simple()
         self.button_scien = Button(self.window,text="Simple",bg="DarkOrange3",height=3,width=15,command=lambda:self.simple()).grid(row=1, column=5, pady=5,padx=5)
-        self.buttomSin = Button(self.window,text="SIN",bg="gray65",height=4,width=3,command=lambda :self.click("np.sin")).grid(row=6,column=0,pady=5,padx=5)
+        self.buttomSin = Button(self.window,text="SIN",bg="gray65",height=4,width=3,command=lambda :self.click("sin")).grid(row=6,column=0,pady=5,padx=5)
         
     def advanced(self):
         self.clear(self.window)
