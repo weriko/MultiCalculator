@@ -19,6 +19,12 @@ k_constant = 8.9875517923*(10**9)
 class Calculator():
     def __init__(self,debug = False):
         self.window = Tk()
+	
+	image_urlIcon = "https://github.com/weriko/MultiCalculator/blob/master/logo_calculator_simple_final.png?raw=true"
+        image_bytIcon = urlopen(image_url).read()
+        image_b64Icon = base64.encodebytes(image_byt)
+        self.imgIcon = PhotoImage(data=image_b64, master=self.window)
+        self.window.iconphoto(False,self.img)
         self.debug = debug
         self.window.title("Calculator")
         self.window.geometry(f"{int(self.window.winfo_screenwidth()/4)}x{int(self.window.winfo_screenheight()/2)}")
