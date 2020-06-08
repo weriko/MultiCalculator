@@ -9,7 +9,9 @@ from matplotlib import pyplot as plt
 from tkinter import *
 from tkinter import filedialog, messagebox, Scrollbar, Canvas, Frame, Text, PhotoImage
 from sklearn.linear_model import LogisticRegression, LinearRegression
+from urllib.request import urlopen
 import re
+import base64
 π = np.pi
 Exp = 10
 G_constant =6.67408*(10**-11)
@@ -19,12 +21,11 @@ k_constant = 8.9875517923*(10**9)
 class Calculator():
     def __init__(self,debug = False):
         self.window = Tk()
-	
-	image_urlIcon = "https://github.com/weriko/MultiCalculator/blob/master/logo_calculator_simple_final.png?raw=true"
-        image_bytIcon = urlopen(image_url).read()
-        image_b64Icon = base64.encodebytes(image_byt)
-        self.imgIcon = PhotoImage(data=image_b64, master=self.window)
-        self.window.iconphoto(False,self.img)
+        self.image_urlIcon = "https://github.com/weriko/MultiCalculator/blob/master/logo_calculator_simple_final.png?raw=true"
+        self.image_bytIcon = urlopen(self.image_urlIcon).read()
+        self.image_b64Icon = base64.encodebytes(self.image_bytIcon)
+        self.imgIcon = PhotoImage(data=self.image_b64Icon, master=self.window)
+        self.window.iconphoto(False,self.imgIcon)
         self.debug = debug
         self.window.title("Calculator")
         self.window.geometry(f"{int(self.window.winfo_screenwidth()/4)}x{int(self.window.winfo_screenheight()/2)}")
@@ -64,9 +65,9 @@ class Calculator():
         self.buttonEXP = Button(self.window,text="E",bg="DarkOrange3",height=4,width=3,command=lambda:self.click("*Exp**")).grid(row=5,column=1,pady=5,padx=5,stick=E+W)
         self.button_Start_Parenthesis = Button(self.window,text="(",bg="DarkOrange3",height=4,width=3,command=lambda:self.click("(")).grid(row=5,column=3,pady=5,padx=5,stick=E+W)
         self.button_End_Parenthesis= Button(self.window,text=")",bg="DarkOrange3",height=4,width=3,command=lambda:self.click(")")).grid(row=5,column=4,pady=5,padx=5,stick=E+W)
-        self.button_adv = Button(self.window,text="Advanced Options",bg="DarkOrange3",height=3,width=15,command=lambda:self.advanced()).grid(row=2, column=5,pady=5,padx=5,stick=E+W)
-        self.button_cons = Button(self.window,text="Constants",bg="DarkOrange3",height=3,width=15,command=lambda:self.constants()).grid(row=3, column=5, pady=5,padx=5,stick=E+W)
-        self.button_scien = Button(self.window,text="Scientific",bg="DarkOrange3",height=3,width=15,command=lambda:self.scientific()).grid(row=1, column=5, pady=5,padx=5,stick=E+W)
+        self.button_adv = Button(self.window,text="Advanced Options",bg="DarkOrange3",height=4,width=15,command=lambda:self.advanced()).grid(row=2, column=5,pady=5,padx=5,stick=E+W)
+        self.button_cons = Button(self.window,text="Constants",bg="DarkOrange3",height=4,width=15,command=lambda:self.constants()).grid(row=3, column=5, pady=5,padx=5,stick=E+W)
+        self.button_scien = Button(self.window,text="Scientific",bg="DarkOrange3",height=4,width=15,command=lambda:self.scientific()).grid(row=1, column=5, pady=5,padx=5,stick=E+W)
         self.screen1.grid(row=0,column=0,columnspan=5,padx=8,pady=5,stick=E+W)
    
     def replace(self,match):
@@ -975,7 +976,7 @@ class Calculator():
     def scientific(self):
         self.clear(self.window)
         self.simple()
-        self.button_simple = Button(self.window,text="Simple",bg="DarkOrange3",height=3,width=15,command=lambda:self.simple()).grid(row=1, column=5, pady=5,padx=5,stick=E+W)
+        self.button_simple = Button(self.window,text="Simple",bg="DarkOrange3",height=4,width=15,command=lambda:self.simple()).grid(row=1, column=5, pady=5,padx=5,stick=E+W)
         self.button_sin = Button(self.window,text="SIN",bg="honeydew3",height=4,width=3,command=lambda :self.click("sin(")).grid(row=6,column=0,pady=5,padx=5,stick=E+W)
         self.button_cos = Button(self.window,text="COS",bg="honeydew3",height=4,width=3,command=lambda :self.click("cos(")).grid(row=6,column=1,pady=5,padx=5,stick=E+W)
         self.button_tan = Button(self.window,text="TAN",bg="honeydew3",height=4,width=3,command=lambda :self.click("tan(")).grid(row=6,column=2,pady=5,padx=5,stick=E+W)
